@@ -5,7 +5,7 @@ import json
 import praw
 
 # Instantiate reddit instance
-config = json.load(open("config.json"))
+config = json.load(open("server/config.json"))
 reddit = praw.Reddit(client_id=config["client_id"],
                      client_secret=config["client_secret"],
                      user_agent=config["client_username"],
