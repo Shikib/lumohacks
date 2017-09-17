@@ -1,14 +1,12 @@
 from tornado.ioloop import IOLoop
 from tornado.web import Application, url
 from server.MainHandler import MainHandler
-from server.TwitterHandler import TwitterHandler
-from server.RedditHandler import RedditHandler
+from server.AnalyzeHandler import AnalyzeHandler
 
 def make_app():
   return Application([
     url(r"/", MainHandler),
-    url(r"/reddit", RedditHandler),
-    url(r"/twitter", TwitterHandler)
+    url(r"/analyze", AnalyzeHandler)
   ])
 
 def main():
