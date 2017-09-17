@@ -3,9 +3,10 @@ Reddit package.
 """ 
 import json
 import praw
+import datetime
 
 # Instantiate reddit instance
-config = json.load(open("config.json"))
+config = json.load(open("server/config.json"))
 reddit = praw.Reddit(client_id=config["client_id"],
                      client_secret=config["client_secret"],
                      user_agent=config["client_username"],
@@ -31,9 +32,9 @@ def get_user_activity(user, num_user_posts=200):
   print("Getting posts for: %s" % user)
   user_obj = reddit.redditor(user)
   return [
-    post.title + " | " + post.selftext 
+    post.title + " | " + post.selftext + " | " + datetime.datetime.fromtimestamp(post.created)
     if type(post) is praw.models.reddit.submission.Submission 
-    else post.body
+    else post.body + " | " + datetime.datetime.fromtimestamp(post.created)
     for post in user_obj.hot(limit=num_user_posts)
   ]
 
