@@ -7,10 +7,18 @@ def analyze_user(twitter_handler, reddit_handler):
   def _remove_time(s):
     return " ".join(s.split("|")[:-1])
 
-  tweets = twitterapi.get_user_tweets(twitter_handler)
-  posts = reddit.get_user_activity(reddit_handler)
+  sentences = []
 
-  sentences = [_remove_time(s) for s in tweets+posts] 
+  if twitter_handler is not None:
+    try:
+      sentences = sentences + twitterapi.get_user_tweets(twitter_handler)
+    except:
+      print("USER DNE")
+  if reddit_handler is not None:
+    try:
+      sentences = sentences + reddit.get_user_activity(reddit_handler)
+    except:
+      print("USER DNE")
 
   y, merged_y = predict(sentences)
 
