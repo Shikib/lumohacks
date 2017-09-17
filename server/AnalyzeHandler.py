@@ -10,9 +10,9 @@ class AnalyzeHandler(RequestHandler):
     results = analyze.analyze_user(twitter_handler, reddit_handler)
     self.finish({"results": results})
 
-  def post(self, twitter_handler, reddit_handler):
-    self.get_argument('twitter_handler')
-    self.get_argument('reddit_handler')
+  def post(self):
+    twitter_handler = self.get_argument('twitter_handler')
+    reddit_handler = self.get_argument('reddit_handler')
     if twitter_handler is not None:
       twitterapi.send_message(twitter_handler, "Here are some resources.")
     if reddit_handler is not None:
