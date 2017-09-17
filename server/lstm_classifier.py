@@ -6,7 +6,7 @@ from classify import get_data
 from collections import Counter
 from tensorflow.contrib import rnn
 
-train = False
+train = True
 
 # Training Parameters
 learning_rate = 0.001
@@ -128,31 +128,31 @@ accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 init = tf.global_variables_initializer()
 
 if train:
-  with tf.Session() as sess:
-    print("Training started")
-    sess.run(init)
-  
-    for step in range(1, epochs+1):
-      batch_x, batch_y = next_batch(batch_size, x_data, y_data)
-  
-      # Backprop
-      sess.run(train_op, feed_dict={X: batch_x, Y: batch_y})
-      if step % print_every == 0:
-        # Calculate batch loss and accuracy
-        loss, acc = sess.run([loss_op, accuracy], feed_dict={X: batch_x,
-                                                             Y: batch_y})
-        print("Step " + str(step) + ", Minibatch Loss= " + \
-              "{:.4f}".format(loss) + ", Training Accuracy= " + \
-              "{:.3f}".format(acc))
-  
-      if step % eval_every == 1:
-        # Calculate accuracy
-        print("Testing Accuracy:", \
-              sess.run(accuracy, feed_dict={X: x_data[-train_size:], Y: y_data[-train_size:]}))
-  
-    # Save the session
-    saver = tf.train.Saver()
-    saver.save(sess, 'lstm_model',global_step=step)
+  sess = tf.Session()
+  print("Training started")
+  sess.run(init)
+
+  for step in range(1, epochs+1):
+    batch_x, batch_y = next_batch(batch_size, x_data, y_data)
+
+    # Backprop
+    sess.run(train_op, feed_dict={X: batch_x, Y: batch_y})
+    if step % print_every == 0:
+      # Calculate batch loss and accuracy
+      loss, acc = sess.run([loss_op, accuracy], feed_dict={X: batch_x,
+                                                           Y: batch_y})
+      print("Step " + str(step) + ", Minibatch Loss= " + \
+            "{:.4f}".format(loss) + ", Training Accuracy= " + \
+            "{:.3f}".format(acc))
+
+    if step % eval_every == 1:
+      # Calculate accuracy
+      print("Testing Accuracy:", \
+            sess.run(accuracy, feed_dict={X: x_data[-train_size:], Y: y_data[-train_size:]}))
+
+  # Save the session
+  saver = tf.train.Saver()
+  saver.save(sess, 'lstm_model',global_step=step)
 else:
   sess = tf.Session()    
   saver = tf.train.import_meta_graph('lstm_model-1000.meta')

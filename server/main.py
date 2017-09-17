@@ -1,7 +1,7 @@
 from tornado.ioloop import IOLoop
 from tornado.web import Application, url
-from server.MainHandler import MainHandler
-from server.AnalyzeHandler import AnalyzeHandler
+from MainHandler import MainHandler
+from AnalyzeHandler import AnalyzeHandler
 
 def make_app():
   return Application([
