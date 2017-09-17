@@ -27,18 +27,23 @@ def get_posts(num_posts, subs):
 def get_user_activity(user, num_user_posts):
   print("Getting posts for: %s" % user)
   user_obj = reddit.redditor(user)
-  return [
+  texts = [
     post.title + " | " + post.selftext 
     if type(post) is praw.models.reddit.submission.Submission 
     else post.body
     for post in user_obj.hot(limit=num_user_posts)
   ]
 
+  def _clean(s):
+    return s.replace("\n", " ").replace("\t", " ")
+
+  return [_clean(s) for s in texts]
+
 # depressing subreddits
 subs = ["depression", "suicidewatch"]
 
 # Get 1000 posts from each subreddit
-num_posts = 1000
+num_posts = 100
 users = get_posts(num_posts, subs)
 
 # Get a number of posts/comments from user
@@ -62,7 +67,7 @@ open("depressed_data.csv", "w+").writelines(lines)
 subs = ["uplifting", "askreddit"]
 
 # Get 1000 posts from each subreddit
-num_posts = 1000
+num_posts = 100
 users = get_posts(num_posts, subs)
 
 # Get a number of posts/comments from user
