@@ -1,5 +1,6 @@
 from twitter import *
 import json
+import time
 
 """
 Uses the twitter API to get the recent tweets of a user, 
@@ -19,12 +20,14 @@ def get_user_tweets(handler, num_tweets=200):
   """
   tweets = tt.statuses.user_timeline(screen_name=handler, count=num_tweets)
   filtered_tweets = []
+
   for tweet in tweets:
     if (include_retweets == False):
       if ("retweeted_status" not in tweet):
-    	    filtered_tweets.append(tweet['text'])
+    	    filtered_tweets.append(tweet['text'] + " | " + 
+            time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(tweet['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))
     else:
-    	filtered_tweets.append(tweet['text'])
+    	filtered_tweets.append(tweet['text'] + " | " + time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(tweet['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))
   print("Number of tweets: " + str(len(filtered_tweets)))
   return filtered_tweets
 
